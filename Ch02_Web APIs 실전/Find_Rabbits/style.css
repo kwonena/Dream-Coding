@@ -1,0 +1,22 @@
+body {
+    background-color: black;
+    text-align: center;
+}
+.btn {
+    position: relative;
+    top: 30px;
+    width: 250px;
+    height: 40px;
+    border: none;
+    background-color: rgb(230, 107, 107);
+    font-size: x-large;
+    color: white;
+    cursor: pointer;
+}
+img {
+    display: block;
+    margin: auto;
+}
+.image {
+    margin-top: 50px;
+}
