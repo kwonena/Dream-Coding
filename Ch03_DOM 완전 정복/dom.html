@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <section>
+        <h1 id="brand">Dream Coding!</h1>
+        <h3>Don't forget to code your dream</h3>
+    </section>
+    <span>Hello World!</span>
+    <script>
+        const section = document.querySelector('section');
+        const h2 = document.createElement('h2');
+        h2.setAttribute('class', 'title'); // <h2 class="title"></h2>
+        h2.textContent = 'This is a title'; // <h2 class="title">This is a title</h2>
+        section.append(h2);
+
+        // <h3> 위에 추가하고 싶다면
+        // const h3 = document.querySelector('h3');
+        // section.insertBefore(h2, h3);
+    </script>
+</body>
+</html>
