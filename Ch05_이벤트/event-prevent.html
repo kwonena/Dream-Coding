@@ -30,12 +30,16 @@
       document.addEventListener('wheel', event => {
         console.log('scrolling');
         event.preventDefault();
-      });
+        // 빠르게 동작해야 하는 행동(scrolling)은 브라우저의 기본 값을 취소할 수 없다 
+      },
+      { passive: false });
+      // Listener가 active가 됨
       const checkbox = document.querySelector('input');
       checkbox.addEventListener('click', event => {
-        // long
         console.log('checked');
         event.preventDefault();
+        // 브라우저에서 기본적으로 발생하는 동작을 취소
+        // 브라우저의 행동이 무시가 됨
       });
     </script>
   </body>
