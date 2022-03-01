@@ -1,7 +1,7 @@
 "use strict";
 import PopUp from "./popup.js";
+import Field from "./field.js";
 
-const CARROT_SIZE = 80;
 const CARROT_COUNT = 5;
 const BUG_COUNT = 5;
 const GAME_DURATION_SEC = 5;
@@ -9,12 +9,6 @@ const GAME_DURATION_SEC = 5;
 const gameBtn = document.querySelector(".game_button");
 const gameTimer = document.querySelector(".game_timer");
 const gameScore = document.querySelector(".game_score");
-
-const carrotSound = new Audio("./sound/carrot_pull.mp3");
-const alertSound = new Audio("./sound/alert.wav");
-const bgSound = new Audio("./sound/bg.mp3");
-const bugSound = new Audio("./sound/bug_pull.mp3");
-const winSound = new Audio("./sound/game_win.mp3");
 
 let started = false;
 let score = 0;
@@ -24,7 +18,27 @@ const gameFinishBanner = new PopUp();
 gameFinishBanner.setEventListener(() => {
   startGame();
 });
-field.addEventListener("click", onFiledClick);
+
+const gameField = new Field(CARROT_COUNT, BUG_COUNT);
+gameField.setEventListener(onItemClick);
+
+function onItemClick(item) {
+  // 조건이 맞지 않을 때 빨리 함수를 return 하는게 중요함
+  if (!started) {
+    return;
+  }
+  if (item === "carrot") {
+    // 당근!!
+    score++;
+    updateScoreBoard();
+    if (score === CARROT_COUNT) {
+      finishGame(true);
+    }
+  } else if (item === "bug") {
+    // 벌레!!
+    finishGame(false);
+  }
+}
 
 gameBtn.addEventListener("click", () => {
   if (started) {
@@ -97,7 +111,7 @@ function startGameTimer() {
 function stopGameTimer() {
   clearInterval(timer);
   hideGameButton();
-  showPopUpWithText("REPLAY?");
+  gameFinishBanner.showWithText("REPLAY?");
 }
 
 function updateTimerText(time) {
@@ -109,43 +123,9 @@ function updateTimerText(time) {
 function initGame() {
   score = 0;
   gameScore.innerText = CARROT_COUNT;
-}
-
-function onFiledClick(event) {
-  // 조건이 맞지 않을 때 빨리 함수를 return 하는게 중요함
-  if (!started) {
-    return;
-  }
-  const target = event.target;
-  if (target.matches(".carrot")) {
-    // 당근!!
-    target.remove();
-    score++;
-    playSound(carrotSound);
-    updateScoreBoard();
-    if (score === CARROT_COUNT) {
-      stopGameTimer();
-      finishGame(true);
-    }
-  } else if (target.matches(".bug")) {
-    // 벌레!!
-    finishGame(false);
-  }
-}
-
-function playSound(sound) {
-  sound.currentTime = 0;
-  sound.play();
-}
-
-function stopSound(sound) {
-  sound.pause();
+  gameField.init();
 }
 
 function updateScoreBoard() {
   gameScore.innerText = CARROT_COUNT - score;
-}
-
-function randomNumber(min, max) {
-  return Math.random() * (max - min) + min;
 }

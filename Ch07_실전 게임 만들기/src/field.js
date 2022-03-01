@@ -1,19 +1,26 @@
 "use strict";
+// 게임을 정확하게 생성, 아이템 제자리에 배치, 클릭 핸들링 역할
+
+const CARROT_SIZE = 80;
 
 export default class Field {
   constructor(carrotCount, bugCount) {
     this.carrotCount = carrotCount;
     this.bugCount = bugCount;
     this.field = document.querySelector(".game_field");
-    this.fieldRect = field.getBoundingClientRect();
+    this.fieldRect = this.field.getBoundingClientRect();
     this.field.addEventListener("click", this.onClick);
   }
 
   init() {
-    field.innerHTML = "";
+    this.field.innerHTML = "";
     // 벌레와 당근을 생성한 뒤 field에 추가해줌
-    this._addItem("carrot", CARROT_COUNT, "img/carrot.png");
-    this._addItem("bug", BUG_COUNT, "img/bug.png");
+    this._addItem("carrot", this.carrotCount, "img/carrot.png");
+    this._addItem("bug", this.bugCount, "img/bug.png");
+  }
+
+  setEventListener(onItemClick) {
+    this.onItemClick = onItemClick;
   }
 
   // private한 함수라는 것을 알리기 위해 underbar_ 사용
@@ -34,5 +41,25 @@ export default class Field {
       this.field.appendChild(item);
     }
   }
-  onClick(event) {}
+  onClick(event) {
+    const target = event.target;
+    if (target.matches(".carrot")) {
+      // 당근!!
+      target.remove();
+      playSound(carrotSound);
+      this.onItemClick && this.onItemClick("carrot");
+    } else if (target.matches(".bug")) {
+      // 벌레!!
+      this.onItemClick && this.onItemClick("bug");
+    }
+  }
+}
+
+function randomNumber(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+function playSound(sound) {
+  sound.currentTime = 0;
+  sound.play();
 }
