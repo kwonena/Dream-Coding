@@ -11,6 +11,11 @@ export default class Field {
     this.field = document.querySelector(".game_field");
     this.fieldRect = this.field.getBoundingClientRect();
     this.field.addEventListener("click", this.onClick);
+    // JS에서 클래스에 있는 함수를 전달할 때 클래스의 정보가 무시됨
+    // -> this 바인딩 필요
+    // 1. this.onClick = this.onClick.bind(this);
+    // 2. arrow function : arrow func는 this가 유지됨
+    // 3. 콜백을 받는 함수를 arrow function으로 변경
   }
 
   init() {
@@ -42,7 +47,7 @@ export default class Field {
       this.field.appendChild(item);
     }
   }
-  onClick(event) {
+  onClick = (event) => {
     const target = event.target;
     if (target.matches(".carrot")) {
       // 당근!!
@@ -53,7 +58,7 @@ export default class Field {
       // 벌레!!
       this.onItemClick && this.onItemClick("bug");
     }
-  }
+  };
 }
 
 function randomNumber(min, max) {
