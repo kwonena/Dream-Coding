@@ -1,9 +1,16 @@
 import Field from "./field.js";
 import * as sound from "./sound.js";
 
+// 오타를 방지해 실수를 덜어줄 수 있음
+export const Reason = Object.freeze({
+  win: "win",
+  lose: "lose",
+  cancel: "cancel",
+});
+
 // Builder Pattern
 // 오브젝트를 간단명료하고 가독성 좋게끔 만들 수 있는 장점
-export default class GameBuilder {
+export class GameBuilder {
   withGameDuration(duration) {
     this.gameDuration = duration;
     return this;
@@ -72,7 +79,7 @@ class Game {
     this.hideGameButton();
     sound.playAlert();
     sound.stopBackground();
-    this.onGameStop && this.onGameStop("cancel");
+    this.onGameStop && this.onGameStop(Reason.cancel);
   }
 
   finish(win) {
@@ -85,7 +92,7 @@ class Game {
     }
     this.stopGameTimer();
     sound.stopBackground();
-    this.onGameStop && this.onGameStop(win ? "win" : "lose");
+    this.onGameStop && this.onGameStop(win ? Reason.win : Reason.lose);
   }
 
   // this 정보에 접근할 때 arrow
